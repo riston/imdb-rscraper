@@ -1,0 +1,19 @@
+{
+    "name": "imdb-rscraper",
+    "author": "Risto Novik <est.risto@gmail.com>",
+    "homepage": "http://veebdev.wordpress.com/",
+    "version": "0.0.1",
+    "description": "Scraping the data from IMDB with JQuery selectors",
+    "main": "imdb-rscraper.js",
+    "keywords": [
+        "imdb",
+        "scraper"
+    ],
+    "dependencies" : {
+        "jsdom": ">= 0.2.12"    
+    },
+    "repository" : {
+        "type" : "git",
+        "url" : ""
+    } 
+}
