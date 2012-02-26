@@ -1,0 +1,10 @@
+## How to use
+Example of how to use
+
+```javascript
+var imdb = require('../imdb-rscraper').imdbrscraper;
+
+imdb('http://www.imdb.com/title/tt0348836/', function(resultData) { 
+	console.log(resultData); 
+});
+```
