@@ -27,6 +27,18 @@ var parse = {
       }
     },
     {
+      name: 'duration',
+      sel: function($) {
+        return $('time[itemprop="duration"]').text();
+      }
+    },
+    {
+      name: 'release',
+      sel: function($) {
+        return $('time[itemprop="datePublished"]').text();
+      }
+    },
+    {
       name: 'cast',
       sel: function($) {
         var castList = $('.cast_list tr:gt(0)')
@@ -45,7 +57,7 @@ var parse = {
       }
     },
     {
-      name: 'medias',
+      name: 'media',
       sel: function($) {
         var matches = $('.mediastrip a img')
           , result = [];
