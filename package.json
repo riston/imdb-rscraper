@@ -2,8 +2,8 @@
     "name": "imdb-rscraper",
     "author": "Risto Novik <est.risto@gmail.com>",
     "homepage": "http://veebdev.wordpress.com/",
-    "version": "0.0.1",
-    "description": "Scraping the data from IMDB with JQuery selectors",
+    "version": "0.0.2",
+    "description": "Scraping the data from IMDB with JQuery selectors. The current implementaion does not parse all data so if you need some content more contact me.",
     "main": "imdb-rscraper.js",
     "keywords": [
         "imdb",
