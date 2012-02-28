@@ -9,3 +9,7 @@ imdb('http://www.imdb.com/title/tt0348836/', jquery, function(resultData) {
 imdb('fast and furious', jquery, function(resultData) { 
 	console.log(resultData); 
 });
+
+imdb('the ring', jquery, function(resultData) { 
+	console.log(resultData); 
+});

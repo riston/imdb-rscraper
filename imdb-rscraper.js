@@ -1,7 +1,5 @@
 var jsdom = require('jsdom');
-//site: 'http://www.imdb.com/title/tt0348836/'
 
-//For getting top result from search $('td a[href^="/title"]').attr('href')
 var parseOptions = {
   mainSite: 'http://www.imdb.com',
   elements: [
@@ -85,8 +83,8 @@ module.exports.imdbrscraper = function(site, jquery, cb) {
     });    
   };
 
-  function parseData(site, jquery, $, err) {
-    parse(site, jquery, function($, err) {
+  function movieData(imdbAddress) {
+    parse(imdbAddress, jquery, function($, err) {
       var result = {};
       parseOptions.elements.forEach(function(elem) {
         result[elem.name] = elem.sel($);
@@ -97,27 +95,14 @@ module.exports.imdbrscraper = function(site, jquery, cb) {
 
   if (site.search("^http://") === 0) {
     // Site is given make direct parsing
-    parse(site, jquery, function($, err) {
-      var result = {};
-      parseOptions.elements.forEach(function(elem) {
-        result[elem.name] = elem.sel($);
-      });
-      cb(result, err);
-    });
+    movieData(site);
   } else {
     // We need to make extra query to get the web page
     var searchSite = parseOptions.mainSite + '/find?q=' + encodeURIComponent(site);
     parse(searchSite, jquery, function($, err) {
       var partOf = $('td a[href^="/title"]:first').attr('href')
         , result = {};
-
-      parse(parseOptions.mainSite + partOf, jquery, function($, err) {
-        var result = {};
-        parseOptions.elements.forEach(function(elem) {
-          result[elem.name] = elem.sel($);
-        });
-        cb(result, err);
-      });
+      movieData(parseOptions.mainSite + partOf);
     });    
   }
 }
