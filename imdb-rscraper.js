@@ -1,9 +1,9 @@
-var jsdom = require('jsdom')
-  , fs = require('fs');
-
-var jquery = fs.readFileSync('./jquery.min.js').toString();
+var jsdom = require('jsdom');
 //site: 'http://www.imdb.com/title/tt0348836/'
-var parse = {
+
+//For getting top result from search $('td a[href^="/title"]').attr('href')
+var parseOptions = {
+  mainSite: 'http://www.imdb.com',
   elements: [
     { 
       name: 'name', 
@@ -74,18 +74,50 @@ var parse = {
   ]
 };
 
-module.exports.imdbrscraper = function(site, cb) {
-  jsdom.env({
-    html: site,
-    src: [ jquery],
-    done: function(err, window) {
-      var $ = window.$, result = {};
+module.exports.imdbrscraper = function(site, jquery, cb) {
+  function parse(site, jquery, callback) {
+    jsdom.env({
+      html: site,
+      src: [ jquery],
+      done: function(err, window) {
+        callback(window.$, err);
+      }
+    });    
+  };
 
-      parse.elements.forEach(function(elem) {
+  function parseData(site, jquery, $, err) {
+    parse(site, jquery, function($, err) {
+      var result = {};
+      parseOptions.elements.forEach(function(elem) {
         result[elem.name] = elem.sel($);
-     });
-     
-     cb(result);
-    }
-  });
+      });
+      cb(result, err);
+    });    
+  }
+
+  if (site.search("^http://") === 0) {
+    // Site is given make direct parsing
+    parse(site, jquery, function($, err) {
+      var result = {};
+      parseOptions.elements.forEach(function(elem) {
+        result[elem.name] = elem.sel($);
+      });
+      cb(result, err);
+    });
+  } else {
+    // We need to make extra query to get the web page
+    var searchSite = parseOptions.mainSite + '/find?q=' + encodeURIComponent(site);
+    parse(searchSite, jquery, function($, err) {
+      var partOf = $('td a[href^="/title"]:first').attr('href')
+        , result = {};
+
+      parse(parseOptions.mainSite + partOf, jquery, function($, err) {
+        var result = {};
+        parseOptions.elements.forEach(function(elem) {
+          result[elem.name] = elem.sel($);
+        });
+        cb(result, err);
+      });
+    });    
+  }
 }
